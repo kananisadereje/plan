@@ -1,0 +1,4 @@
+{% extends 'base.html' %}{% block c %}<h1 class="h4">{{t.dashboard}}</h1><div class="row g-3"><div class="col-lg-7"><div class="panel"><canvas id="ch" height="130"></canvas></div></div>
+<div class="col-lg-5"><div class="panel"><b>{{t.pending}}:</b> {{pend}}<hr>{% for k in kpi %}<div class="mb-2">{{k.title}} <span class="float-end">{{k.pct or 0}}%</span>
+<div class="progress" style="height:6px"><div class="progress-bar bg-success" style="width:{{[k.pct or 0,100]|min}}%"></div></div></div>{% else %}{{t.empty}}{% endfor %}</div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3"></script><script>fetch('/api/monthly').then(r=>r.json()).then(d=>new Chart(ch,{type:'bar',data:{labels:d.labels,datasets:[{label:'{{t.monthly}}',data:d.data,backgroundColor:'#1e6b4a'}]}}))</script>{% endblock %}

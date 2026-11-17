@@ -1,0 +1,33 @@
+{% extends 'base.html' %}{% block c %}<div class="d-flex justify-content-between align-items-center mb-2"><h1 class="h4 mb-0">{{t.performance}}</h1><div><a class="btn btn-sm btn-outline-dark" href="{{url_for('reports')}}">Reports</a>{% if current_user.role=='admin' %} <a class="btn btn-sm btn-outline-dark" href="{{url_for('users')}}">Admin</a>{% endif %}</div></div>
+<nav aria-label="Performance periods" class="mb-3"><div class="nav nav-pills gap-2">
+	<a class="nav-link {{'active' if period == 'annual' else 'text-dark'}}" href="{{url_for('performance', period='annual')}}">{{t.annual}} {{t.performance}}</a>
+	<a class="nav-link {{'active' if period == 'monthly' else 'text-dark'}}" href="{{url_for('performance', period='monthly')}}">{{t.monthly}} {{t.performance}}</a>
+	<a class="nav-link {{'active' if period == 'quarterly' else 'text-dark'}}" href="{{url_for('performance', period='quarterly')}}">{{t.quarterly}} {{t.performance}}</a>
+	<a class="nav-link {{'active' if period == 'weekly' else 'text-dark'}}" href="{{url_for('performance', period='weekly')}}">{{t.weekly}} {{t.performance}}</a>
+	<a class="nav-link {{'active' if period == 'daily' else 'text-dark'}}" href="{{url_for('performance', period='daily')}}">{{t.daily}} {{t.performance}}</a>
+</div></nav>
+
+{% if period == 'annual' %}
+<div class="table-responsive"><table class="table table-sm table-bordered mb-0">
+<thead><tr><th>{{t.year}}</th><th>{{t.activity}}</th><th>Annual target</th><th>{{t.achieved}}</th><th>Unit</th><th>Weight</th><th>Past year performance</th><th>%</th></tr></thead><tbody>{% for r in annual %}<tr><td>{{r.year}}</td><td>{{r.title}}</td><td>{{r.annual_target}}</td><td>{{r.total}}</td><td>{{r.unit}}</td><td>{{r.weight}}</td><td>{{r.past_year_performance}}</td><td>{{r.pct or 0}}%</td></tr>{% else %}<tr><td colspan="8" class="text-muted">{{t.empty}}</td></tr>{% endfor %}</tbody>
+</table></div>
+{% else %}
+<form method="post">
+<input type="hidden" name="do" value="achieved"><input type="hidden" name="view" value="{{period}}">
+<div class="table-responsive"><table class="table table-sm table-bordered mb-0">
+<thead><tr>
+{% if period == 'monthly' %}<th>{{t.year}}</th><th>{{t.monthly}}</th>
+{% elif period == 'quarterly' %}<th>{{t.year}}</th><th>{{t.quarterly}}</th>
+{% elif period == 'weekly' %}<th>{{t.weekly}}</th>
+{% else %}<th>{{t.date}}</th>{% endif %}
+<th>{{t.activity}}</th><th>{{t.achieved}}</th><th>{% if period == 'monthly' %}Monthly{% elif period == 'quarterly' %}Quarterly{% elif period == 'weekly' %}Weekly{% else %}Daily{% endif %} target</th><th>Unit</th><th>Weight</th><th>Past year performance</th><th>{{t.assign}}</th></tr></thead><tbody>
+{% for r in period_rows %}<tr>
+{% if period == 'monthly' %}<td>{{r.period_start.year}}</td><td>{{r.period_start.month}}</td>
+{% elif period == 'quarterly' %}<td>{{r.period_start.year}}</td><td>Q{{((r.period_start.month - 1) // 3) + 1}}</td>
+{% else %}<td>{{r.period_start}}</td>{% endif %}
+<td>{{r.title}}</td><td><input type="number" name="achieved_{{r.id}}" value="{{r.achieved}}" min="0" step="any" class="form-control form-control-sm" style="min-width:110px" aria-label="{{t.achieved}}"></td><td>{{r.target}}</td><td>{{r.unit}}</td><td>{{r.weight}}</td><td>{{r.past_year_performance}}</td><td>{{r.assigned_to or '-'}}</td></tr>{% else %}<tr><td colspan="9" class="text-muted">{{t.empty}}</td></tr>{% endfor %}</tbody>
+</table></div>
+<button class="btn btn-g btn-sm mt-2">{{t.save}}</button>
+</form>
+{% endif %}
+</section>{% endblock %}

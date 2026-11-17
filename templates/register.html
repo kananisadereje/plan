@@ -1,0 +1,27 @@
+{% extends 'base.html' %}{% block l %}
+<main class="container py-4" style="max-width:900px">
+  <h1 class="h3">Create an account</h1>
+  {% if submitted %}
+  <div class="alert alert-success">Registration received. An administrator must approve your account before you can sign in.</div>
+  <a href="{{ url_for('login') }}">Return to sign in</a>
+  {% else %}
+  {% if err %}<div class="alert alert-danger">{{err}}</div>{% endif %}
+  <form method="post" enctype="multipart/form-data" class="panel row g-3">
+    <div class="col-md-6"><label class="form-label">Full name</label><input name="full_name" class="form-control" required></div>
+    <div class="col-md-6"><label class="form-label">FAN number</label><input name="fan_number" class="form-control" required></div>
+    <div class="col-md-4"><label class="form-label">Country</label><input name="country" class="form-control" required></div>
+    <div class="col-md-4"><label class="form-label">State</label><input name="state" class="form-control" required></div>
+    <div class="col-md-4"><label class="form-label">City or county</label><input name="city_county" class="form-control" required></div>
+    <div class="col-md-4"><label class="form-label">District</label><input name="district" class="form-control" required></div>
+    <div class="col-md-4"><label class="form-label">Type of job</label><input name="job_type" class="form-control" required></div>
+    <div class="col-md-4"><label class="form-label">Office working</label><input name="office_working" class="form-control" required></div>
+    <div class="col-md-6"><label class="form-label">Phone number</label><input name="phone_number" type="tel" class="form-control" required></div>
+    <div class="col-md-6"><label class="form-label">Email</label><input name="email" type="email" class="form-control" required></div>
+    <div class="col-md-6"><label class="form-label">Profile photo</label><input name="profile_photo" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-control" required></div>
+    <div class="col-md-6"><label class="form-label">Password</label><input name="password" type="password" minlength="8" autocomplete="new-password" class="form-control" required></div>
+    <div class="col-md-6"><label class="form-label">Confirm password</label><input name="confirm_password" type="password" minlength="8" autocomplete="new-password" class="form-control" required></div>
+    <div class="col-12 d-flex gap-3 align-items-center"><button class="btn btn-g">Submit registration</button><a href="{{ url_for('login') }}">Already registered? Sign in</a></div>
+  </form>
+  {% endif %}
+</main>
+{% endblock %}

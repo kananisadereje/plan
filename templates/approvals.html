@@ -1,0 +1,3 @@
+{% extends 'base.html' %}{% block c %}<h1 class="h4">{{t.approvals}}</h1><div class="panel"><table class="table"><tr><th>{{t.date}}</th><th>{{t.activity}}</th><th>{{t.name}}</th><th>{{t.qty}}</th><th></th></tr>
+{% for r in rows %}<tr><td>{{r.perf_date}}</td><td>{{r.title}}</td><td>{{r.who}}</td><td>{{r.quantity}}</td><td><form method="post"><input type="hidden" name="id" value="{{r.id}}">
+<button name="decision" value="approve" class="btn btn-sm btn-g">{{t.approve}}</button> <button name="decision" value="reject" class="btn btn-sm btn-outline-danger">{{t.reject}}</button></form></td></tr>{% else %}<tr><td colspan="5">{{t.empty}}</td></tr>{% endfor %}</table></div>{% endblock %}

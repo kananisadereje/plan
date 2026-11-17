@@ -1,0 +1,3 @@
+{% extends 'base.html' %}{% block c %}<h1 class="h4">{{t.settings}}</h1><form method="post" class="panel row g-2 mb-3"><div class="col-md-5"><input name="en" class="form-control" placeholder="{{t.dept}} (English)" required></div>
+<div class="col-md-5"><input name="om" class="form-control" placeholder="{{t.dept}} (Afaan Oromoo)" required></div><div class="col-md-2"><button class="btn btn-g w-100">{{t.add}}</button></div></form>
+<div class="panel"><b>Audit log</b><table class="table table-sm">{% for l in logs %}<tr><td>{{l.at.strftime('%Y-%m-%d %H:%M')}}</td><td>{{l.full_name}}</td><td>{{l.action}}</td><td>{{l.detail}}</td></tr>{% endfor %}</table></div>{% endblock %}

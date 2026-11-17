@@ -1,0 +1,5 @@
+{% extends 'base.html' %}{% block l %}<div class="container" style="max-width:400px;margin-top:12vh"><h1 class="h4 mb-1">{{t.app}}</h1>
+<p><a href="/lang/om">Afaan Oromoo</a> | <a href="/lang/en">English</a></p>{% if err %}<div class="alert alert-danger">{{t.bad}}</div>{% endif %}
+<form method="post" class="panel"><label class="form-label">{{t.email}}</label><input name="email" type="email" class="form-control mb-3" required>
+<label class="form-label">{{t.password}}</label><input name="password" type="password" class="form-control mb-3" required><button class="btn btn-g w-100">{{t.login}}</button>
+<p class="mb-0 mt-3 text-center"><a href="{{ url_for('register') }}">Create an account</a></p></form></div>{% endblock %}

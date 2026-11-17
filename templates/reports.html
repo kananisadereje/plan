@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block c %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+	<h1 class="h4 mb-0">{{t.reports}}</h1>
+	<div><a class="btn btn-g btn-sm" href="/export/xlsx">Excel</a> <a class="btn btn-outline-dark btn-sm" href="/export/pdf">PDF</a></div>
+</div>
+<nav aria-label="Performance periods" class="mb-3">
+	<div class="nav nav-pills gap-2">
+		<a class="nav-link {{'active' if period == 'performance' else 'text-dark'}}" href="{{url_for('reports', period='performance')}}">{{t.performance}}</a>
+		<a class="nav-link {{'active' if period == 'annual' else 'text-dark'}}" href="{{url_for('reports', period='annual')}}">{{t.annual}} {{t.performance}}</a>
+		<a class="nav-link {{'active' if period == 'monthly' else 'text-dark'}}" href="{{url_for('reports', period='monthly')}}">{{t.monthly}} {{t.performance}}</a>
+		<a class="nav-link {{'active' if period == 'quarterly' else 'text-dark'}}" href="{{url_for('reports', period='quarterly')}}">{{t.quarterly}} {{t.performance}}</a>
+		<a class="nav-link {{'active' if period == 'weekly' else 'text-dark'}}" href="{{url_for('reports', period='weekly')}}">{{t.weekly}} {{t.performance}}</a>
+		<a class="nav-link {{'active' if period == 'daily' else 'text-dark'}}" href="{{url_for('reports', period='daily')}}">{{t.daily}} {{t.performance}}</a>
+	</div>
+</nav>
+
+{% if period == 'performance' %}
+<section class="panel"><div class="table-responsive"><table class="table table-sm table-bordered mb-0">
+	<thead><tr><th>{{t.activity}}</th><th>Unit</th><th>{{t.achieved}}</th><th>Approved entries</th></tr></thead><tbody>
+		{% for r in overall %}<tr><td>{{r.title}}</td><td>{{r.unit}}</td><td>{{r.total}}</td><td>{{r.entries}}</td></tr>
+		{% else %}<tr><td colspan="4" class="text-muted">{{t.empty}}</td></tr>{% endfor %}
+	</tbody>
+</table></div></section>
+{% elif period == 'annual' %}
+<section class="panel"><div class="table-responsive"><table class="table table-sm table-bordered mb-0">
+	<thead><tr><th>{{t.year}}</th><th>{{t.activity}}</th><th>{{t.target}}</th><th>{{t.achieved}}</th><th>%</th></tr></thead><tbody>
+		{% for r in annual %}<tr><td>{{r.year}}</td><td>{{r.title}}</td><td>{{r.annual_target}}</td><td>{{r.total}}</td><td>{{r.pct}}</td></tr>
+		{% else %}<tr><td colspan="5" class="text-muted">{{t.empty}}</td></tr>{% endfor %}
+	</tbody>
+</table></div></section>
+{% elif period == 'monthly' %}
+<section class="panel"><div class="table-responsive"><table class="table table-sm table-bordered mb-0">
+	<thead><tr><th>{{t.year}}</th><th>{{t.monthly}}</th><th>{{t.activity}}</th><th>{{t.achieved}}</th></tr></thead><tbody>
+		{% for r in monthly %}<tr><td>{{r.year}}</td><td>{{r.month}}</td><td>{{r.title}}</td><td>{{r.total}} {{r.unit}}</td></tr>
+		{% else %}<tr><td colspan="4" class="text-muted">{{t.empty}}</td></tr>{% endfor %}
+	</tbody>
+</table></div></section>
+{% elif period == 'quarterly' %}
+<section class="panel"><div class="table-responsive"><table class="table table-sm table-bordered mb-0">
+	<thead><tr><th>{{t.year}}</th><th>{{t.quarterly}}</th><th>{{t.activity}}</th><th>{{t.achieved}}</th></tr></thead><tbody>
+		{% for r in quarterly %}<tr><td>{{r.year}}</td><td>Q{{r.quarter}}</td><td>{{r.title}}</td><td>{{r.total}} {{r.unit}}</td></tr>
+		{% else %}<tr><td colspan="4" class="text-muted">{{t.empty}}</td></tr>{% endfor %}
+	</tbody>
+</table></div></section>
+{% elif period == 'weekly' %}
+<section class="panel"><div class="table-responsive"><table class="table table-sm table-bordered mb-0">
+	<thead><tr><th>{{t.weekly}}</th><th>{{t.activity}}</th><th>{{t.achieved}}</th></tr></thead><tbody>
+		{% for r in weekly %}<tr><td>{{r.week_start}}</td><td>{{r.title}}</td><td>{{r.total}} {{r.unit}}</td></tr>
+		{% else %}<tr><td colspan="3" class="text-muted">{{t.empty}}</td></tr>{% endfor %}
+	</tbody>
+</table></div></section>
+{% else %}
+<section class="panel"><div class="table-responsive"><table class="table table-sm table-bordered mb-0">
+	<thead><tr><th>{{t.date}}</th><th>{{t.activity}}</th><th>{{t.qty}}</th><th>{{t.status}}</th><th>{{t.name}}</th></tr></thead><tbody>
+		{% for r in daily %}<tr><td>{{r.perf_date}}</td><td>{{r.title}}</td><td>{{r.quantity}} {{r.unit}}</td><td>{{r.status}}</td><td>{{r.who or '-'}}</td></tr>
+		{% else %}<tr><td colspan="5" class="text-muted">{{t.empty}}</td></tr>{% endfor %}
+	</tbody>
+</table></div></section>
+{% endif %}
+{% endblock %}
